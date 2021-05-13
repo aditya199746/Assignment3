@@ -33,14 +33,19 @@ const quizDB=[
     }
 ];
 
-const question=document.querySelector(".queston");
+const question=document.querySelector(".question");
 const option1=document.querySelector("#option1");
-const option2=document.querySelector("#option1");
-const option3=document.querySelector("#option1");
-const option4=document.querySelector("#option1");
+const option2=document.querySelector("#option2");
+const option3=document.querySelector("#option3");
+const option4=document.querySelector("#option4");
 const submit=document.querySelector("#submit");
-let qusCount=0;
+let queCount=0;
 
+let score=0;
+
+const answers=document.querySelectorAll(".answer");
+
+const showScore=document.querySelector("#showScore");
 const loadQuestion=()=>{
     const questionList=quizDB[queCount];
 
@@ -54,6 +59,43 @@ const loadQuestion=()=>{
 
 loadQuestion();
 
+const getCheckAnswer=()=>{
+    let answer;
+
+    answers.forEach((currAnsElem)=>{
+        if(currAnsElem.checked)
+        {
+            answer=currAnsElem.id;
+        }
+    });
+    return answer;
+
+};
+
+const deselectAll=()=>{
+    answers.forEach((curAnsElem)=>curAnsElem.checked=false)
+}
+
 submit.addEventListener('click', ()=>{
-    const checked
-})
+    const checkedAnswer=getCheckAnswer();
+    
+    if(checkedAnswer===quizDB[queCount].ans)
+    {
+        score++;
+    };
+
+
+    queCount++;
+    deselectAll();
+    if(queCount<quizDB.length)
+    {
+        loadQuestion();
+    }
+    else{
+        showScore.innerHTML=`
+        <h3> You scored ${score}/${quizDB.length} </h3>
+        <button class="btn" onclick="location.reload()">play again</button>`;
+
+        showScore.classList.remove('scoreArea')
+    }
+});
